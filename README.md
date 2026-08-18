@@ -79,6 +79,6 @@ Production is **Render + Neon Postgres**. Vercel was skipped: that account is a 
 
 4. Wait for the first deploy. The build runs `prisma migrate deploy` and seeds Alex / Jordan / Sam.
 
-The public URL will look like `https://briefpad.onrender.com`. Hobby instances may spin down when idle; the first request after a pause can take ~30s.
+The public URL will look like `https://briefpad.onrender.com`. Use the **Free** instance (spins down when idle). Do not pick **Starter** ($7/month).
 
 Preferred review path: the live URL + the demo logins above. Local Docker is for development, not for the Drive zip.
