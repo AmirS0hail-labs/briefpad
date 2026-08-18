@@ -60,7 +60,7 @@ This review stays in this file because the evaluation includes mature AI use and
 
 **Tests:** `npm test` — 11 cases on access + import. Not TDD of the UI.
 
-**Deploy:** Vercel CLI is logged out on this machine, so the live URL is waiting on `npx vercel login` plus a Neon project (`DATABASE_URL`, `DIRECT_URL`, `SESSION_SECRET`). GitHub is already public.
+**Deploy:** Vercel CLI signed in, but that team is a **suspended Pro** account (402) — not a usable Hobby plan. Switched to **Render + Neon**. `render.yaml` is in the repo; first live URL needs a GitHub push plus Neon pooled/direct URLs in the Render dashboard.
 
 ## Working agreement
 

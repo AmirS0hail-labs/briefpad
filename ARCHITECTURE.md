@@ -54,7 +54,9 @@ The meaningful automated tests lock **access rules** (owner vs shared vs strange
 
 ## Live deploy
 
-Vercel + Neon. Pooled `DATABASE_URL` at runtime, `DIRECT_URL` for `prisma migrate deploy`. Build also seeds demo users so reviewers always have Alex / Jordan / Sam. `SESSION_SECRET` is a Vercel env, never committed.
+## Live deploy
+
+Render + Neon. Pooled `DATABASE_URL` at runtime, `DIRECT_URL` for `prisma migrate deploy`. Build also seeds demo users so reviewers always have Alex / Jordan / Sam. `SESSION_SECRET` is generated on Render, never committed. Vercel was not used: the existing Vercel team is a suspended Pro account.
 
 ## Local vs Drive download
 

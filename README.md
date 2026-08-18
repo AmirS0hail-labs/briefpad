@@ -65,18 +65,20 @@ Markdown (`.md`) and plain text (`.txt`) only, up to 1MB. Word (`.docx`) is out 
 
 ## Live deploy
 
-Production is **Vercel + Neon Postgres** (free tiers). Vercel’s filesystem will not keep SQLite.
+Production is **Render + Neon Postgres**. Vercel was skipped: that account is a suspended Pro team, not a usable Hobby plan.
 
-1. Create a Neon project. Copy the **pooled** connection string and the **direct** (non-pooler) string.
-2. `npx vercel login` then `npx vercel`.
-3. Set env vars on the Vercel project:
+1. Commit and push this repo to GitHub (Render deploys from `main`).
+2. In Render: **New** → **Blueprint** (or **Web Service**) → select `AmirS0hail-labs/briefpad`.
+3. When prompted for env vars:
 
 | Name | Value |
 | --- | --- |
-| `DATABASE_URL` | Neon pooled URL (`sslmode=require`) |
-| `DIRECT_URL` | Neon direct URL (for migrations) |
-| `SESSION_SECRET` | at least 32 characters (`openssl rand -base64 32`) |
+| `DATABASE_URL` | Neon **pooled** URL (`-pooler` in the host, `sslmode=require`) |
+| `DIRECT_URL` | Neon **direct** URL (no `-pooler`) |
+| `SESSION_SECRET` | Render can generate this (`generateValue` in `render.yaml`) |
 
-4. Redeploy. The build runs `prisma migrate deploy` and seeds the three demo accounts.
+4. Wait for the first deploy. The build runs `prisma migrate deploy` and seeds Alex / Jordan / Sam.
+
+The public URL will look like `https://briefpad.onrender.com`. Hobby instances may spin down when idle; the first request after a pause can take ~30s.
 
 Preferred review path: the live URL + the demo logins above. Local Docker is for development, not for the Drive zip.
