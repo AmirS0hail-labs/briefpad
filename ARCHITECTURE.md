@@ -20,7 +20,7 @@ What is still real: hashed passwords, httpOnly signed JWT cookie, logout, route 
 
 ## Why Postgres
 
-SQLite is fine on a laptop disk. The live app will run on Vercel, where the filesystem is ephemeral — SQLite would drop data on deploy. Neon Postgres is the production store. Locally, `docker-compose.yml` runs Postgres on port 5433 so reviewers do not need a Neon account to try the repo.
+SQLite is fine on a laptop disk. The live app runs on Render, where the filesystem is ephemeral — SQLite would drop data on deploy. Neon Postgres is the production store. Locally, `docker-compose.yml` runs Postgres on port 5433 so reviewers do not need a Neon account to try the repo.
 
 ## Data model
 
@@ -54,9 +54,7 @@ The meaningful automated tests lock **access rules** (owner vs shared vs strange
 
 ## Live deploy
 
-## Live deploy
-
-Render + Neon. Pooled `DATABASE_URL` at runtime, `DIRECT_URL` for `prisma migrate deploy`. Build also seeds demo users so reviewers always have Alex / Jordan / Sam. `SESSION_SECRET` is generated on Render, never committed. Vercel was not used: the existing Vercel team is a suspended Pro account.
+Render + Neon. Pooled `DATABASE_URL` at runtime, `DIRECT_URL` for `prisma migrate deploy`. Build also seeds demo users so reviewers always have Alex / Jordan / Sam. `SESSION_SECRET` is generated on Render, never committed. Vercel was not used: the existing Vercel team is a suspended Pro account. SQLite was rejected for the live app because a host filesystem would not keep documents across deploys.
 
 ## Local vs Drive download
 
