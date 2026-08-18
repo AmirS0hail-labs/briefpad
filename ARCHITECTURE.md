@@ -48,6 +48,14 @@ Last-write-wins. No OT/CRDT, no document locks. Two people on the same brief: th
 
 `.md` and `.txt` only, max 1MB, stated on the home screen. A small Markdown subset maps onto the editor: headings, lists, bold, italic. `.docx` is a zip of XML with lossy mapping — we call that out instead of shipping a flaky importer. Import creates a **new** brief; it does not merge into the current draft.
 
+## Tests
+
+The meaningful automated tests lock **access rules** (owner vs shared vs stranger) and import validation (file type/size, Markdown mapping). Run `npm test`. They are not TDD of the whole UI.
+
+## Live deploy
+
+Vercel + Neon. Pooled `DATABASE_URL` at runtime, `DIRECT_URL` for `prisma migrate deploy`. Build also seeds demo users so reviewers always have Alex / Jordan / Sam. `SESSION_SECRET` is a Vercel env, never committed.
+
 ## Local vs Drive download
 
 Preferred review path: **live URL** + demo logins. A Drive zip will not include `.env` or `node_modules`. README leads with Docker + `.env.example`. Do not commit secrets.

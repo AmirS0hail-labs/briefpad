@@ -26,6 +26,12 @@ npm run db:seed
 npm run dev
 ```
 
+Run tests:
+
+```bash
+npm test
+```
+
 Open [http://localhost:3000](http://localhost:3000). Docker Postgres is mapped to **host port 5433** so it does not clash with a local Postgres on 5432.
 
 ### Demo accounts
@@ -56,3 +62,21 @@ Home → **Import file**. Markdown and plain text only, **up to 1MB**. `.docx` i
 ## File import limits
 
 Markdown (`.md`) and plain text (`.txt`) only, up to 1MB. Word (`.docx`) is out of v1.
+
+## Live deploy
+
+Production is **Vercel + Neon Postgres** (free tiers). Vercel’s filesystem will not keep SQLite.
+
+1. Create a Neon project. Copy the **pooled** connection string and the **direct** (non-pooler) string.
+2. `npx vercel login` then `npx vercel`.
+3. Set env vars on the Vercel project:
+
+| Name | Value |
+| --- | --- |
+| `DATABASE_URL` | Neon pooled URL (`sslmode=require`) |
+| `DIRECT_URL` | Neon direct URL (for migrations) |
+| `SESSION_SECRET` | at least 32 characters (`openssl rand -base64 32`) |
+
+4. Redeploy. The build runs `prisma migrate deploy` and seeds the three demo accounts.
+
+Preferred review path: the live URL + the demo logins above. Local Docker is for development, not for the Drive zip.

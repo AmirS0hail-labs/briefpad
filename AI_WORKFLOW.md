@@ -58,6 +58,10 @@ This review stays in this file because the evaluation includes mature AI use and
 
 **Import slice:** Home → Import file → `docs/sample-brief.md`. Headings, lists, bold/italic land in the editor. A `.docx` is rejected in the UI copy and validation.
 
+**Tests:** `npm test` — 11 cases on access + import. Not TDD of the UI.
+
+**Deploy:** Vercel CLI is logged out on this machine, so the live URL is waiting on `npx vercel login` plus a Neon project (`DATABASE_URL`, `DIRECT_URL`, `SESSION_SECRET`). GitHub is already public.
+
 ## Working agreement
 
 I review every Agent diff. Commits should tell a story (scaffold/auth, then documents, then editor, then sharing, then import) — not one dump and not noise. Agent does not run `git commit` or `git push`.
