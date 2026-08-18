@@ -40,9 +40,11 @@ Same password for all: `briefpad-demo`
 
 ## Current slice
 
-Working: sign in/out, create/rename/edit briefs with autosave, share with a seeded teammate, owned vs shared lists.
+Working: sign in/out, create/rename/edit briefs with autosave, import `.md`/`.txt` as a new brief, share with a seeded teammate, owned vs shared lists.
 
-Not built yet: import `.md`/`.txt`.
+### Import
+
+Home → **Import file**. Markdown and plain text only, **up to 1MB**. `.docx` is not supported (stated on the home screen). A sample file is at `docs/sample-brief.md`.
 
 ### Sharing demo
 
@@ -51,6 +53,6 @@ Not built yet: import `.md`/`.txt`.
 3. Sign in as **Sam** — the brief should not appear, and a direct link shows **No access**.
 4. As Alex, **Remove** Jordan to revoke.
 
-## File import limits (planned)
+## File import limits
 
-Markdown and plain text only, up to 1MB. `.docx` is out of v1.
+Markdown (`.md`) and plain text (`.txt`) only, up to 1MB. Word (`.docx`) is out of v1.

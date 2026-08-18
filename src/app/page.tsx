@@ -1,5 +1,6 @@
 import { AppHeader } from "@/components/app-header";
 import { BriefSection } from "@/components/brief-section";
+import { ImportBriefButton } from "@/components/import-brief-button";
 import { NewBriefButton } from "@/components/new-brief-button";
 import { createBrief } from "@/app/briefs/actions";
 import { requireCurrentUser } from "@/lib/auth";
@@ -22,12 +23,16 @@ export default async function HomePage() {
               Briefs
             </h1>
             <p className="mt-2 max-w-xl text-sm leading-6 text-stone-600">
-              Start from a blank page, then share it with a teammate.
+              Start from a blank page, import a draft, then share it with a
+              teammate.
             </p>
           </div>
-          <form action={createBrief}>
-            <NewBriefButton />
-          </form>
+          <div className="flex flex-wrap items-start justify-end gap-3">
+            <form action={createBrief}>
+              <NewBriefButton />
+            </form>
+            <ImportBriefButton />
+          </div>
         </div>
 
         <BriefSection

@@ -34,6 +34,7 @@ This review stays in this file because the evaluation includes mature AI use and
 - Next.js App Router scaffold, Prisma schema, cookie session with `jose`, login form with demo teammate fill.
 - Tiptap 3 wiring (StarterKit scoped to the formats we promised, not a kitchen-sink editor).
 - Share panel against the seeded teammate directory instead of a free-form email ACL admin.
+- A Markdown-to-Tiptap converter for the formats we actually edit, instead of Mammoth/docx.
 
 ## What I changed or rejected from the model
 
@@ -54,6 +55,8 @@ This review stays in this file because the evaluation includes mature AI use and
 **Editor slice:** Create a brief, type title and formatted body, confirm Saving → Saved, refresh and see the same JSON/formatting, go home and see it under Yours. Open a made-up `/briefs/not-a-real-id` for the not-found page.
 
 **Sharing slice:** Alex shares with Jordan; Jordan sees it under Shared with you and can edit; Sam cannot open it; Alex can revoke. No viewer-only role.
+
+**Import slice:** Home → Import file → `docs/sample-brief.md`. Headings, lists, bold/italic land in the editor. A `.docx` is rejected in the UI copy and validation.
 
 ## Working agreement
 

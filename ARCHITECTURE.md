@@ -44,9 +44,9 @@ Rough size: a short brief is tens of KB of JSON; a 1MB Markdown import may expan
 
 Last-write-wins. No OT/CRDT, no document locks. Two people on the same brief: the later PATCH wins. Duplicate share inserts fail on the unique constraint. This is a deliberate cut, not an accident.
 
-## File import (planned)
+## File import
 
-`.md` and `.txt` only, max 1MB, stated in the UI. `.docx` is a zip of XML with lossy mapping — unreliable in a timebox. Call the limit out rather than ship a flaky importer.
+`.md` and `.txt` only, max 1MB, stated on the home screen. A small Markdown subset maps onto the editor: headings, lists, bold, italic. `.docx` is a zip of XML with lossy mapping — we call that out instead of shipping a flaky importer. Import creates a **new** brief; it does not merge into the current draft.
 
 ## Local vs Drive download
 

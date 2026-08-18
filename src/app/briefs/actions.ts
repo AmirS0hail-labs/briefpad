@@ -15,6 +15,11 @@ import {
   normalizeTitle,
   parseTiptapDocJson,
 } from "@/lib/document";
+import {
+  fileToTiptap,
+  titleFromFilename,
+  validateImportFile,
+} from "@/lib/import-file";
 import { prisma } from "@/lib/prisma";
 
 export async function createBrief() {
@@ -23,6 +28,44 @@ export async function createBrief() {
     data: {
       title: "Untitled",
       contentJson: EMPTY_DOC as Prisma.InputJsonValue,
+      ownerId: user.id,
+    },
+  });
+
+  revalidatePath("/");
+  redirect(`/briefs/${brief.id}`);
+}
+
+export type ImportState = { error: string } | null;
+
+export async function importBrief(
+  _prev: ImportState,
+  formData: FormData,
+): Promise<ImportState> {
+  const user = await requireCurrentUser();
+  const file = formData.get("file");
+  if (!(file instanceof File) || file.name === "") {
+    return { error: "Choose a Markdown or text file to import." };
+  }
+
+  const typeError = validateImportFile(file);
+  if (typeError) {
+    return { error: typeError };
+  }
+
+  const text = await file.text();
+  const contentJson = fileToTiptap(file.name, text);
+  const sizeError = contentSizeError(contentJson);
+  if (sizeError) {
+    return { error: sizeError };
+  }
+
+  const brief = await prisma.document.create({
+    data: {
+      title: titleFromFilename(file.name),
+      contentJson: JSON.parse(
+        JSON.stringify(contentJson),
+      ) as Prisma.InputJsonValue,
       ownerId: user.id,
     },
   });
