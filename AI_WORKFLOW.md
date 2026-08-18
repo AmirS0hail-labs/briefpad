@@ -60,7 +60,7 @@ This review stays in this file because the evaluation includes mature AI use and
 
 **Tests:** `npm test` — 11 cases on access + import. Not TDD of the UI.
 
-**Deploy:** Vercel CLI signed in, but that team is a **suspended Pro** account (402) — not a usable Hobby plan. Switched to **Render + Neon**. `render.yaml` is in the repo; first live URL needs a GitHub push plus Neon pooled/direct URLs in the Render dashboard.
+**Deploy:** Vercel CLI signed in, but that team is a **suspended Pro** account (402) — not a usable Hobby plan. Railway trial had ended. Switched to **Render Free + Neon**. Live URL: `https://briefpad.onrender.com`. After the first deploy, login and create worked, but Network showed `_rsc` 404s, a missing Turbopack JS chunk, a post-login “Something went wrong” page, and a flaky first autosave. Cause: `proxy.ts` redirected Flight requests (logged-in `/login?_rsc=` → `/`), `saveBrief` revalidated the open editor, and Next 16’s default Turbopack production build requested a chunk relative to `/briefs/[id]`. Fix: skip `_rsc` in Proxy, bounce signed-in users from the login page instead, do not revalidate the open brief on save, and `next build --webpack`. Separate from that: first login / save / navigation often failed, then succeeded on retry, and sometimes worked first try. That is Render Free + Neon sleeping — the login page does not query Postgres until Sign in, so the first action is a cold connect that Neon refuses once. Prisma now retries transient connect errors and the login page starts `$connect()` while the form is on screen.
 
 ## Working agreement
 

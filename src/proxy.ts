@@ -2,7 +2,18 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { SESSION_COOKIE, verifySession } from "@/lib/session";
 
+function isFlightRequest(request: NextRequest) {
+  return request.nextUrl.searchParams.has("_rsc");
+}
+
 export async function proxy(request: NextRequest) {
+  // Do not redirect Flight requests. Next strips RSC headers inside Proxy, so
+  // a 307 to another path arrives as HTML and the client shows "Not Found".
+  // Pages still enforce auth via requireCurrentUser / the login page redirect.
+  if (isFlightRequest(request)) {
+    return NextResponse.next();
+  }
+
   const { pathname } = request.nextUrl;
   const session = await verifySession(
     request.cookies.get(SESSION_COOKIE)?.value,
@@ -12,10 +23,6 @@ export async function proxy(request: NextRequest) {
   if (!session && !isLogin) {
     const loginUrl = new URL("/login", request.url);
     return NextResponse.redirect(loginUrl);
-  }
-
-  if (session && isLogin) {
-    return NextResponse.redirect(new URL("/", request.url));
   }
 
   return NextResponse.next();

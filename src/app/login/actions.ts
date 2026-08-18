@@ -1,7 +1,7 @@
 "use server";
 
 import bcrypt from "bcryptjs";
-import { redirect } from "next/navigation";
+import { redirect, unstable_rethrow } from "next/navigation";
 import { setSessionCookie } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
@@ -20,21 +20,28 @@ export async function loginAction(
     return { error: "Enter your email and password." };
   }
 
-  const user = await prisma.user.findUnique({ where: { email } });
-  if (!user) {
-    return { error: "Email or password is incorrect." };
+  try {
+    const user = await prisma.user.findUnique({ where: { email } });
+    if (!user) {
+      return { error: "Email or password is incorrect." };
+    }
+
+    const valid = await bcrypt.compare(password, user.passwordHash);
+    if (!valid) {
+      return { error: "Email or password is incorrect." };
+    }
+
+    await setSessionCookie({
+      userId: user.id,
+      email: user.email,
+      name: user.name,
+    });
+
+    redirect("/");
+  } catch (error) {
+    unstable_rethrow(error);
+    return {
+      error: "Could not sign in. Wait a few seconds and try again.",
+    };
   }
-
-  const valid = await bcrypt.compare(password, user.passwordHash);
-  if (!valid) {
-    return { error: "Email or password is incorrect." };
-  }
-
-  await setSessionCookie({
-    userId: user.id,
-    email: user.email,
-    name: user.name,
-  });
-
-  redirect("/");
 }

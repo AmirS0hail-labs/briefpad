@@ -1,11 +1,21 @@
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
+import { getCurrentUser } from "@/lib/auth";
+import { warmDatabase } from "@/lib/prisma";
 import { LoginForm } from "./login-form";
 
 export const metadata: Metadata = {
   title: "Sign in · Briefpad",
 };
 
-export default function LoginPage() {
+export default async function LoginPage() {
+  const user = await getCurrentUser();
+  if (user) {
+    redirect("/");
+  }
+
+  warmDatabase();
+
   return (
     <main className="flex flex-1 items-center justify-center px-6 py-16">
       <div className="w-full max-w-md">

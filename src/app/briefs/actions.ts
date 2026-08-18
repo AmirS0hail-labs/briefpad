@@ -109,18 +109,25 @@ export async function saveBrief(input: {
     return { ok: false, error: "You do not have access to this brief." };
   }
 
-  const updated = await prisma.document.update({
-    where: { id: brief.id },
-    data: {
-      title: normalizeTitle(input.title),
-      contentJson: contentJson as Prisma.InputJsonValue,
-    },
-  });
+  try {
+    const updated = await prisma.document.update({
+      where: { id: brief.id },
+      data: {
+        title: normalizeTitle(input.title),
+        contentJson: contentJson as Prisma.InputJsonValue,
+      },
+    });
 
-  revalidatePath("/");
-  revalidatePath(`/briefs/${brief.id}`);
-
-  return { ok: true, updatedAt: updated.updatedAt.toISOString(), title: updated.title };
+    // Do not revalidate the open editor. A Flight refresh on this path 404s
+    // behind Render and remounts Tiptap while the user is still typing.
+    return {
+      ok: true,
+      updatedAt: updated.updatedAt.toISOString(),
+      title: updated.title,
+    };
+  } catch {
+    return { ok: false, error: "Could not save. Try again." };
+  }
 }
 
 export type ShareBriefResult = { ok: true } | { ok: false; error: string };
