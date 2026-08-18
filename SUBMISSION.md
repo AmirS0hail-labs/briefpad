@@ -8,6 +8,7 @@
 
 - **Live URL:** https://briefpad.onrender.com
 - **Source:** https://github.com/AmirS0hail-labs/briefpad
+- **Drive:** https://drive.google.com/drive/folders/1cITHJmmrXNk-VaKA5Ej8X82CGcsf6P1p?usp=sharing
 - **Walkthrough:** https://www.loom.com/share/2cc6aac1b2014ac68920a13a4c543bcc (silent — Loom mic failed in the timebox; same URL in `VIDEO_URL.txt`)
 
 First load after idle can take 30–50s (Render Free). Neon also sleeps; if the first click errors, wait a few seconds and retry.
