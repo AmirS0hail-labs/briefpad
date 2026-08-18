@@ -12,3 +12,7 @@ export function canAccessDocument(params: {
 export function canManageSharing(params: { userId: string; ownerId: string }) {
   return params.userId === params.ownerId;
 }
+
+export function canShareWith(params: { ownerId: string; targetUserId: string }) {
+  return params.ownerId !== params.targetUserId;
+}

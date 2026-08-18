@@ -22,7 +22,7 @@ export default async function HomePage() {
               Briefs
             </h1>
             <p className="mt-2 max-w-xl text-sm leading-6 text-stone-600">
-              Start from a blank page. Import from a file comes next.
+              Start from a blank page, then share it with a teammate.
             </p>
           </div>
           <form action={createBrief}>
@@ -34,11 +34,18 @@ export default async function HomePage() {
           heading="Yours"
           empty="No briefs yet. Create one to start writing."
           briefs={owned}
+          variant="owned"
         />
         <BriefSection
           heading="Shared with you"
           empty="Nothing shared yet. When a teammate grants access, it will show up here."
-          briefs={shared}
+          briefs={shared.map((brief) => ({
+            id: brief.id,
+            title: brief.title,
+            updatedAt: brief.updatedAt,
+            ownerName: brief.owner.name,
+          }))}
+          variant="shared"
         />
       </main>
     </div>

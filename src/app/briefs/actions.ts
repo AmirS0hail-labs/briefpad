@@ -3,7 +3,11 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import type { Prisma } from "@prisma/client";
-import { canAccessDocument } from "@/lib/access";
+import {
+  canAccessDocument,
+  canManageSharing,
+  canShareWith,
+} from "@/lib/access";
 import { requireCurrentUser } from "@/lib/auth";
 import {
   contentSizeError,
@@ -74,4 +78,94 @@ export async function saveBrief(input: {
   revalidatePath(`/briefs/${brief.id}`);
 
   return { ok: true, updatedAt: updated.updatedAt.toISOString(), title: updated.title };
+}
+
+export type ShareBriefResult = { ok: true } | { ok: false; error: string };
+
+async function loadOwnedBrief(documentId: string, userId: string) {
+  const brief = await prisma.document.findUnique({
+    where: { id: documentId },
+    select: { id: true, ownerId: true },
+  });
+
+  if (!brief) {
+    return { ok: false as const, error: "This brief no longer exists." };
+  }
+
+  if (!canManageSharing({ userId, ownerId: brief.ownerId })) {
+    return {
+      ok: false as const,
+      error: "Only the owner can change who has access.",
+    };
+  }
+
+  return { ok: true as const, brief };
+}
+
+export async function shareBrief(input: {
+  documentId: string;
+  userId: string;
+}): Promise<ShareBriefResult> {
+  const user = await requireCurrentUser();
+  const owned = await loadOwnedBrief(input.documentId, user.id);
+  if (!owned.ok) {
+    return owned;
+  }
+
+  if (!canShareWith({ ownerId: owned.brief.ownerId, targetUserId: input.userId })) {
+    return { ok: false, error: "You already own this brief." };
+  }
+
+  const teammate = await prisma.user.findUnique({
+    where: { id: input.userId },
+    select: { id: true },
+  });
+  if (!teammate) {
+    return { ok: false, error: "That teammate is not on Briefpad." };
+  }
+
+  try {
+    await prisma.documentShare.create({
+      data: {
+        documentId: owned.brief.id,
+        userId: teammate.id,
+      },
+    });
+  } catch (error) {
+    if (
+      typeof error === "object" &&
+      error !== null &&
+      "code" in error &&
+      error.code === "P2002"
+    ) {
+      return { ok: true };
+    }
+    throw error;
+  }
+
+  revalidatePath("/");
+  revalidatePath(`/briefs/${owned.brief.id}`);
+  return { ok: true };
+}
+
+export async function revokeShare(input: {
+  documentId: string;
+  userId: string;
+}): Promise<ShareBriefResult> {
+  const user = await requireCurrentUser();
+  const owned = await loadOwnedBrief(input.documentId, user.id);
+  if (!owned.ok) {
+    return owned;
+  }
+
+  await prisma.documentShare.deleteMany({
+    where: {
+      documentId: owned.brief.id,
+      userId: input.userId,
+    },
+  });
+
+  revalidatePath("/");
+  revalidatePath(`/briefs/${owned.brief.id}`);
+  return { ok: true };
 }

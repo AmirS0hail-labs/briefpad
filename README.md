@@ -40,9 +40,16 @@ Same password for all: `briefpad-demo`
 
 ## Current slice
 
-Working: sign in/out, create a blank brief, rename via the title field, rich-text editing (bold, italic, underline, headings, lists), autosave, reopen after refresh. Home splits **Yours** and **Shared with you** (sharing itself is next).
+Working: sign in/out, create/rename/edit briefs with autosave, share with a seeded teammate, owned vs shared lists.
 
-Not built yet: import `.md`/`.txt`, sharing.
+Not built yet: import `.md`/`.txt`.
+
+### Sharing demo
+
+1. Sign in as **Alex**, open a brief, click **Share**, share with **Jordan Chen**.
+2. Sign out, sign in as **Jordan**. The brief is under **Shared with you** (not Yours). Jordan can edit.
+3. Sign in as **Sam** — the brief should not appear, and a direct link shows **No access**.
+4. As Alex, **Remove** Jordan to revoke.
 
 ## File import limits (planned)
 

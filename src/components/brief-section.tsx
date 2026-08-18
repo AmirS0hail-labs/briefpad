@@ -5,16 +5,19 @@ type BriefSummary = {
   id: string;
   title: string;
   updatedAt: Date;
+  ownerName?: string;
 };
 
 export function BriefSection({
   heading,
   empty,
   briefs,
+  variant,
 }: {
   heading: string;
   empty: string;
   briefs: BriefSummary[];
+  variant: "owned" | "shared";
 }) {
   return (
     <section className="mt-10">
@@ -31,10 +34,28 @@ export function BriefSection({
             <li key={brief.id}>
               <Link
                 href={`/briefs/${brief.id}`}
-                className="flex items-baseline justify-between gap-4 px-4 py-3 hover:bg-stone-50"
+                className="flex items-center justify-between gap-4 px-4 py-3 hover:bg-stone-50"
               >
-                <span className="truncate font-medium text-stone-900">
-                  {brief.title}
+                <span className="min-w-0">
+                  <span className="flex items-center gap-2">
+                    <span className="truncate font-medium text-stone-900">
+                      {brief.title}
+                    </span>
+                    <span
+                      className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide ${
+                        variant === "owned"
+                          ? "bg-emerald-50 text-emerald-900"
+                          : "bg-stone-200 text-stone-700"
+                      }`}
+                    >
+                      {variant === "owned" ? "Yours" : "Shared"}
+                    </span>
+                  </span>
+                  {brief.ownerName ? (
+                    <span className="mt-0.5 block truncate text-xs text-stone-500">
+                      From {brief.ownerName}
+                    </span>
+                  ) : null}
                 </span>
                 <span className="shrink-0 text-xs text-stone-500">
                   {formatUpdatedAt(brief.updatedAt)}

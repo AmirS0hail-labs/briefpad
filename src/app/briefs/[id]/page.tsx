@@ -3,9 +3,11 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { AppHeader } from "@/components/app-header";
 import { BriefEditor } from "@/components/brief-editor";
+import { SharePanel } from "@/components/share-panel";
 import { getCurrentUser, requireCurrentUser } from "@/lib/auth";
-import { getBriefForUser } from "@/lib/briefs";
+import { getBriefForUser, listTeammates } from "@/lib/briefs";
 import { asTiptapDoc } from "@/lib/document";
+import { canManageSharing } from "@/lib/access";
 
 export async function generateMetadata({
   params,
@@ -59,16 +61,41 @@ export default async function BriefPage({
   }
 
   const { brief } = result;
+  const isOwner = canManageSharing({ userId: user.id, ownerId: brief.ownerId });
+  const teammates = isOwner
+    ? (await listTeammates(brief.ownerId)).map((person) => ({
+        ...person,
+        hasAccess: brief.shares.some((share) => share.userId === person.id),
+      }))
+    : [];
 
   return (
     <div className="flex min-h-full flex-col">
       <AppHeader userName={user.name} />
       <main className="mx-auto w-full max-w-3xl flex-1 px-6 py-8">
-        <p className="mb-6 text-sm text-stone-500">
-          <Link href="/" className="underline-offset-4 hover:underline">
-            All briefs
-          </Link>
-        </p>
+        {isOwner ? (
+          <SharePanel documentId={brief.id} teammates={teammates}>
+            <Link
+              href="/"
+              className="text-sm text-stone-500 underline-offset-4 hover:underline"
+            >
+              All briefs
+            </Link>
+          </SharePanel>
+        ) : (
+          <div className="mb-6 flex items-start justify-between gap-4">
+            <Link
+              href="/"
+              className="text-sm text-stone-500 underline-offset-4 hover:underline"
+            >
+              All briefs
+            </Link>
+            <p className="max-w-xs text-right text-sm text-stone-500">
+              Shared with you by {brief.owner.name}. You can edit. Only they can
+              change access.
+            </p>
+          </div>
+        )}
         <BriefEditor
           id={brief.id}
           initialTitle={brief.title}
