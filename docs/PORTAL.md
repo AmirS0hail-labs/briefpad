@@ -2,7 +2,9 @@
 
 **Live:** https://briefpad.onrender.com  
 **Repo:** https://github.com/AmirS0hail-labs/briefpad  
-**Video:** paste the Loom URL here after recording (also in `VIDEO_URL.txt`).
+**Video:** https://www.loom.com/share/2cc6aac1b2014ac68920a13a4c543bcc
+
+Walkthrough is silent (Loom mic permission failed in the timebox). Sequence: Alex signs in → new brief + formatting + Saved → share with Jordan → Jordan edits under Shared with you → Sam has no access. Cuts: no realtime, no viewer role, no `.docx`.
 
 **Logins** (password `briefpad-demo`):
 - alex@briefpad.app — Alex Rivera

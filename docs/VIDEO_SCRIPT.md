@@ -1,6 +1,7 @@
-# Walkthrough script (3 minutes)
+# Walkthrough
 
-Record the **live** site. Do not narrate Cursor. Unlisted Loom or YouTube is fine.
+Recorded: https://www.loom.com/share/2cc6aac1b2014ac68920a13a4c543bcc  
+Silent (Loom mic permission failed). Use this as the caption if reviewers need a voiceover.
 
 0:00 — “Briefpad is an internal writing tool. Seeded teammates, not Google Docs.”
 0:20 — Open https://briefpad.onrender.com (wait if it is waking). Sign in as Alex.
