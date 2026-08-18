@@ -40,9 +40,9 @@ Same password for all: `briefpad-demo`
 
 ## Current slice
 
-Working: sign in, sign out, session cookie, empty home with **Yours** vs **Shared with you**.
+Working: sign in/out, create a blank brief, rename via the title field, rich-text editing (bold, italic, underline, headings, lists), autosave, reopen after refresh. Home splits **Yours** and **Shared with you** (sharing itself is next).
 
-Not built yet: create/edit documents, import `.md`/`.txt`, sharing.
+Not built yet: import `.md`/`.txt`, sharing.
 
 ## File import limits (planned)
 

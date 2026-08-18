@@ -1,4 +1,5 @@
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import {
   SESSION_COOKIE,
@@ -42,4 +43,12 @@ export async function getCurrentUser() {
     where: { id: session.userId },
     select: { id: true, email: true, name: true },
   });
+}
+
+export async function requireCurrentUser() {
+  const user = await getCurrentUser();
+  if (!user) {
+    redirect("/login");
+  }
+  return user;
 }

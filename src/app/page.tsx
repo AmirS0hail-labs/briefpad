@@ -1,56 +1,45 @@
-import { getCurrentUser } from "@/lib/auth";
-import { logoutAction } from "@/app/login/logout-action";
+import { AppHeader } from "@/components/app-header";
+import { BriefSection } from "@/components/brief-section";
+import { NewBriefButton } from "@/components/new-brief-button";
+import { createBrief } from "@/app/briefs/actions";
+import { requireCurrentUser } from "@/lib/auth";
+import { listOwnedBriefs, listSharedBriefs } from "@/lib/briefs";
 
 export default async function HomePage() {
-  const user = await getCurrentUser();
+  const user = await requireCurrentUser();
+  const [owned, shared] = await Promise.all([
+    listOwnedBriefs(user.id),
+    listSharedBriefs(user.id),
+  ]);
 
   return (
     <div className="flex min-h-full flex-col">
-      <header className="border-b border-stone-200 bg-[#fffcf7]">
-        <div className="mx-auto flex w-full max-w-5xl items-center justify-between px-6 py-4">
-          <p className="font-serif text-xl text-stone-900">Briefpad</p>
-          <div className="flex items-center gap-4 text-sm">
-            <span className="text-stone-600">{user?.name}</span>
-            <form action={logoutAction}>
-              <button
-                type="submit"
-                className="text-stone-700 underline-offset-4 hover:underline"
-              >
-                Sign out
-              </button>
-            </form>
-          </div>
-        </div>
-      </header>
-
+      <AppHeader userName={user.name} />
       <main className="mx-auto w-full max-w-5xl flex-1 px-6 py-10">
-        <h1 className="text-2xl font-medium tracking-tight text-stone-900">
-          Briefs
-        </h1>
-        <p className="mt-2 max-w-xl text-sm leading-6 text-stone-600">
-          A quiet place for team writing. Create a brief, import a draft, or
-          open something shared with you.
-        </p>
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <h1 className="text-2xl font-medium tracking-tight text-stone-900">
+              Briefs
+            </h1>
+            <p className="mt-2 max-w-xl text-sm leading-6 text-stone-600">
+              Start from a blank page. Import from a file comes next.
+            </p>
+          </div>
+          <form action={createBrief}>
+            <NewBriefButton />
+          </form>
+        </div>
 
-        <section className="mt-10">
-          <h2 className="text-sm font-medium uppercase tracking-wide text-stone-500">
-            Yours
-          </h2>
-          <p className="mt-3 rounded-lg border border-dashed border-stone-300 bg-[#fffcf7] px-4 py-8 text-sm text-stone-500">
-            No briefs yet. You will be able to start from a blank page or import
-            a Markdown or text file.
-          </p>
-        </section>
-
-        <section className="mt-8">
-          <h2 className="text-sm font-medium uppercase tracking-wide text-stone-500">
-            Shared with you
-          </h2>
-          <p className="mt-3 rounded-lg border border-dashed border-stone-300 bg-[#fffcf7] px-4 py-8 text-sm text-stone-500">
-            Nothing shared yet. When a teammate grants access, it will show up
-            here.
-          </p>
-        </section>
+        <BriefSection
+          heading="Yours"
+          empty="No briefs yet. Create one to start writing."
+          briefs={owned}
+        />
+        <BriefSection
+          heading="Shared with you"
+          empty="Nothing shared yet. When a teammate grants access, it will show up here."
+          briefs={shared}
+        />
       </main>
     </div>
   );

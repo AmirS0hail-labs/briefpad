@@ -6,7 +6,7 @@ Briefpad is an internal writing tool: a coherent slice a small team could use, n
 
 - Blank **new brief** and **import** (`.md` / `.txt`) are both first-class. An early flowchart showed import more clearly than create; create-from-scratch was never cut.
 - Home splits **Yours** and **Shared with you**.
-- Editor (next): Tiptap with bold, italic, underline, headings, lists, debounced autosave.
+- Editor: Tiptap with bold, italic, underline, H1/H2, lists, debounced autosave. Body is stored as Tiptap JSON. Last write wins. Rename is the inline title on the editor.
 - Sharing: owner grants access to a seeded teammate. Shared users can edit. No RBAC (viewer vs editor) in v1 — that is listed as stretch in the brief.
 - Persistence: Postgres so a live deploy keeps documents after refresh.
 

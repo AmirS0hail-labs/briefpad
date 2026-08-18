@@ -32,6 +32,7 @@ This review stays in this file because the evaluation includes mature AI use and
 ## What sped things up
 
 - Next.js App Router scaffold, Prisma schema, cookie session with `jose`, login form with demo teammate fill.
+- Tiptap 3 wiring (StarterKit scoped to the formats we promised, not a kitchen-sink editor).
 
 ## What I changed or rejected from the model
 
@@ -42,13 +43,14 @@ This review stays in this file because the evaluation includes mature AI use and
 - Auto commit/push.
 - Dark-mode template chrome and “Create Next App” homepage.
 - Next.js 16 deprecated `middleware.ts`; used `src/proxy.ts` instead.
+- Extra Tiptap surfaces (code blocks, quotes, links, strike) — the spec asked for a usable editor, not Google Docs chrome.
+- Passing Tiptap `getJSON()` objects into a Server Action. Nested lists/headings tripped Next’s serializer (`toStringTag` / client reference). Saves now send a JSON string and parse on the server. A failed save shows Retry instead of hanging on “Saving…”.
 
-## How I verify (this slice)
+## How I verify
 
-- Docker Desktop was not running at first; started it, then `docker compose up`, migrate, seed. Three users in Postgres: Alex, Jordan, Sam.
-- Unauthenticated `/` redirects to `/login`. Login page shows demo teammates and the shared password.
-- `npm run lint` is clean. Session cookie signing uses `jose`; passwords are bcrypt hashes from seed.
-- I did not treat a raw curl of a Next server action as the UX test — sign-in should be checked in the browser.
+**Login slice:** Docker, migrate, seed; `/` redirects to `/login`; demo accounts on the login page.
+
+**Editor slice:** Create a brief, type title and formatted body, confirm Saving → Saved, refresh and see the same JSON/formatting, go home and see it under Yours. Open a made-up `/briefs/not-a-real-id` for the not-found page.
 
 ## Working agreement
 
